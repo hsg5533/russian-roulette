@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="icon" href="./img/icon.png" />
+
+    <title>Russian Roulette</title>
+    <style>
+      @font-face {
+        font-family: Semi-Casual;
+        src: url("./font/Timeburner-xJB8.ttf");
+      }
+      body {
+        margin: 0;
+        background-image: url("./img/background.jpg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-attachment: fixed;
+      }
+      title {
+        font-family: Semi-Casual;
+      }
+      h1 {
+        font-family: Semi-Casual;
+        width: 100%;
+        text-align: center;
+        margin: 0;
+        color: white;
+      }
+      .shoot {
+        width: 200px;
+        padding-top: 20px;
+        height: 40px;
+        font-size: 18px;
+        background-color: #d3d3d3;
+        border-radius: 30px;
+        font-family: Semi-Casual;
+        color: black;
+        text-align: center;
+        margin: auto;
+        user-select: none;
+      }
+
+      .shoot:hover {
+        background-color: #c3c3c3;
+        cursor: pointer;
+      }
+
+      .shoot.active {
+        background-color: #a3a3a3;
+      }
+      .revolver {
+        width: 200px;
+        margin: auto;
+        display: block;
+      }
+      .muzzleFlash {
+        position: absolute;
+        width: 348px;
+      }
+      .message {
+        font-family: Semi-Casual;
+        font-size: 20px;
+        padding-top: 40px;
+        height: 40px;
+        text-align: center;
+      }
+      .blackout {
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        position: absolute;
+        opacity: 0;
+        animation: 0;
+        display: none;
+      }
+      @keyframes fadeOut {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="blackout"></div>
+    <div style="height: 10px"></div>
+    <h1>Play Russian Roulette.</h1>
+    <div style="height: 160px"></div>
+    <div class="shoot">
+      <b> Fire </b>
+    </div>
+    <script>
+      const firingAudio = new Audio("./sound/gunFire.mp3");
+      const misfiringAudio = new Audio("./sound/gunMisfire.mp3");
+      const muzzleFlash = document.querySelector(".muzzleFlash");
+      const blackout = document.querySelector(".blackout");
+      const message = document.querySelector(".message");
+      const button = document.querySelector(".shoot");
+      const header = document.querySelector("h1");
+      const body = document.querySelector("body");
+      const shootNum = Math.floor(Math.random() * 7);
+      button.addEventListener("mousedown", () => {
+        const randomization = Math.floor(Math.random() * 7);
+        button.classList.add("active");
+        if (randomization === shootNum) {
+          if (firingAudio.paused === true) {
+            firingAudio.play();
+          } else {
+            firingAudio.pause();
+            firingAudio.currentTime = 0;
+            firingAudio.play();
+          }
+          blackout.style.display = "block";
+          blackout.style.animation = "fadeOut 2.4s linear";
+          blackout.style.animationIterationCount = "1";
+          blackout.style.opacity = "1";
+          setTimeout(() => {
+            body.style.backgroundImage = "url('./img/background.jpg')";
+          }, 200);
+          setTimeout(() => {
+            window.location.href = "fail.html";
+          }, 2400);
+        } else {
+          if (misfiringAudio.paused === true) {
+            misfiringAudio.play();
+          } else {
+            misfiringAudio.pause();
+            misfiringAudio.currentTime = 0;
+            misfiringAudio.play();
+          }
+        }
+      });
+
+      button.addEventListener("mouseup", () => {
+        button.classList.remove("active");
+      });
+
+      button.addEventListener("mouseleave", () => {
+        button.classList.remove("active"); // this ensures the button returns to its normal state even if the mouse is still down
+      });
+    </script>
+  </body>
+</html>
